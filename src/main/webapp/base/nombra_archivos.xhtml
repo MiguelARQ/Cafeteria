@@ -1,0 +1,253 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>Carga de archivos</title>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+        <!--Import materialize.css-->
+        <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+        <link type="text/css" rel="stylesheet" href="css/custom.css"/>
+        <!--Let browser know website is optimized for mobile-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+
+        <!--CSS-->
+        <style>
+            body{
+                background-color: #fafafa;
+                display: flex;
+                min-height: 100vh;
+                flex-direction: column;
+            }
+
+            main {
+                flex: 1 0 auto;
+            }
+
+            dataTable{
+                text-decoration: #ffffff;
+
+            }
+
+            .value {
+                width: 1000px;
+            }
+
+            .alerta {
+                background-color: #c62828 !important;
+                background-image: none !important;
+                color: #000000 !important;
+
+            }
+
+            .ui-inputswitch {
+                vertical-align: bottom;
+            }
+        </style>
+    </h:head>
+    <h:body>
+       
+
+       
+
+        <!--Contenido-->
+        <div class="row"></div>
+
+        <div class="row">
+            <div class="col m1 l1 xl1"></div>
+            <div class="col s12 m10 l10 xl10">
+                <div class="col s12 m4 l4 xl4">
+                    <div class="card">
+                        <div class="card-content">
+                            <h:form id="formulario">
+                                <div class="row">
+                                    <h5>Cargar nuevo archivo</h5>
+                                    <br></br>
+                                    <div class="col s12 m12 l12 xl12">
+                                        <p:outputLabel for="tipo" value="Tipo de informe: "/>
+                                        <p:selectOneMenu id="tipo" value="#{fileUploadView.cargaBean.tipo_informe}" style="display: block; margin-bottom: 10px" required="true">
+                                            <f:ajax render="formulario"/>
+                                            <f:selectItem itemLabel="Seleccione" noSelectionOption="true"/>
+
+                                            <f:selectItems value="#{bTipoInformeBean.listaTipoInformeTodos()}" var="inf" itemValue="#{inf.cod}" itemLabel="#{inf.tipo_infrm}"/>
+                                        </p:selectOneMenu>
+                                    </div>
+                                    <div class="col s12 m12 l12 xl12">
+                                        <p:outputLabel for="empresa" value="Empresa: "/>
+                                        <p:selectOneMenu id="empresa" value="#{fileUploadView.cargaBean.empresa}" style="display: block; margin-bottom: 10px" required="true">
+                                            <f:ajax render="formulario"/>
+                                            <!--Value ejecuta el método que contiene la consulta para mostrar la lista-->
+                                            <f:selectItem itemLabel="Seleccione" noSelectionOption="true"/>
+
+                                            <f:selectItems value="#{bEmpresaBean.listaEmpresasTodas()}" var="emp" itemValue="#{emp.id_empresa}" itemLabel="#{emp.empresa}"/>
+                                        </p:selectOneMenu>
+                                    </div>
+                                    <div class="col s12 m12 l12 xl12">
+                                        <p:outputLabel for="ano" value="Año del informe: " />
+                                        <p:selectOneMenu id="ano" value="#{fileUploadView.cargaBean.ano}" style="display: block; margin-bottom: 10px" required="true">
+                                            <f:ajax render="formulario"/>
+                                            <f:selectItem itemLabel="Seleccione" noSelectionOption="true"/>
+                                            <f:selectItem itemLabel="2019" itemValue="2019" />
+                                            <f:selectItem itemLabel="2020" itemValue="2020" />
+                                        </p:selectOneMenu>
+                                    </div>
+                                    <div class="col s12 m12 l12 xl12">
+                                        <p:outputLabel for="mes" value="Mes del informe: " />
+                                        <p:selectOneMenu id="mes" value="#{fileUploadView.cargaBean.mes_informe}" style="display: block; margin-bottom: 10px" required="true">
+                                            <f:ajax render="formulario"/>
+                                            <f:selectItem itemLabel="Seleccione" noSelectionOption="true"/>
+                                            <f:selectItem itemLabel="Enero" itemValue="m01" />
+                                            <f:selectItem itemLabel="Febrero" itemValue="m02" />
+                                            <f:selectItem itemLabel="Marzo" itemValue="m03" />
+                                            <f:selectItem itemLabel="Abril" itemValue="m04" />
+                                            <f:selectItem itemLabel="Mayo" itemValue="m05" />
+                                            <f:selectItem itemLabel="Junio" itemValue="m06" />
+                                            <f:selectItem itemLabel="Julio" itemValue="m07" />
+                                            <f:selectItem itemLabel="Agosto" itemValue="m08" />
+                                            <f:selectItem itemLabel="Septiembre" itemValue="m09" />
+                                            <f:selectItem itemLabel="Octubre" itemValue="m10" />
+                                            <f:selectItem itemLabel="Noviembre" itemValue="m11" />
+                                            <f:selectItem itemLabel="Diciembre" itemValue="m12" />
+                                        </p:selectOneMenu>
+                                    </div>
+                                    <div class="col s12 m12 l12 xl12">
+                                        <p:outputLabel for="switch" value="Impuesto pagado: "/>
+                                        <p:inputSwitch id="switch" value="#{fileUploadView.pagado}" showLabels="true" onLabel="Sí" offLabel="No"/>
+                                    </div>
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col s12 m12 l12 xl12">
+                                        <p:commandLink class="blue darken-3 btn waves-effect waves-light white-text center" action="carga_archivos?faces-redirect=true" actionListener="#{bEmpresaBean.listaEmpresas(bEmpresaBean.empresaBean.id_empresa)}" style="display: block;">Adjuntar</p:commandLink>
+                                    </div>
+                                </div>
+
+                            </h:form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col s12 m8 l8 xl8">
+                    <div class="card">
+                         <div class="card-content">
+                            <h:form id="vistaInf">
+                                <h5>Archivos cargados</h5>
+                                <br></br>
+                                <p:dataTable stripedRows="true" resizableColumns="true" liveResize="true" id="eventsDT" widgetVar="tabArchivo" selectionMode="single" selection="#{bInformeBean.informeBean}" rowKey="#{inf.archivo}" var="inf" value="#{bInformeBean.listaInformeBean}" filteredValue="#{bInformeBean.listaFiltrar}" emptyMessage="No se ha encontrado ningún registro." rows="7" paginator="true" paginatorPosition="bottom"
+                                             paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}">
+
+                                    <f:facet name="header">
+                                        <div class="row" style="margin-bottom: 3px">
+                                            <div class="col m6 l6 xl6"></div>
+                                            <div class="col s12 m6 l6 xl6">
+                                                <div class="right-align">
+                                                    <h:outputText value="Buscar "/>
+                                                    <p:inputText placeholder="" id="globalFilter" onkeyup="PF('tabArchivo').filter()" style="width:150px"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </f:facet>    
+
+                                    <p:ajax event="rowSelect" listener="#{bInformeBean.onRowSelect}"  update="modal" oncomplete="PF('dlg').show();"/>
+
+                                    <p:column filterBy="#{inf.empresa}" headerText="Empresa" filterMatchMode="contains" filterable="false" sortBy="#{inf.empresa}">
+                                        <h:outputText value="#{inf.empresa}"/>
+                                    </p:column>
+
+                                    <p:column filterBy="#{inf.tipo_infrm}" headerText="Tipo informe" filterMatchMode="contains" filterable="false" sortBy="#{inf.tipo_infrm}">
+                                        <h:outputText value="#{inf.tipo_infrm}"/>
+                                    </p:column>
+
+                                    <p:column filterBy="#{inf.mes_infrm}" headerText="Mes" filterMatchMode="contains" filterable="false" sortBy="#{inf.mes_infrm}">
+                                        <h:outputText value="#{inf.mes_infrm}"/>
+                                    </p:column>
+
+                                    <p:column filterBy="#{inf.ano_infrm}" headerText="Año" filterMatchMode="contains" filterable="false" sortBy="#{inf.ano_infrm}">
+                                        <h:outputText value="#{inf.ano_infrm}"/>
+                                    </p:column>
+
+                                    <p:column filterBy="#{inf.archivo}" headerText="Archivo" filterMatchMode="contains" filterable="false" sortBy="#{inf.archivo}">
+                                        <h:outputText value="#{inf.archivo}"/>
+                                    </p:column>
+
+                                    <p:column filterBy="#{inf.fecha_carga}" headerText="Fecha carga" filterMatchMode="contains" filterable="false" sortBy="#{inf.fecha_carga}">
+                                        <h:outputText value="#{inf.fecha_carga}"/>
+                                    </p:column>
+
+                                    <p:column filterBy="#{inf.usuario_carga}" headerText="Usuario" filterMatchMode="contains" filterable="false" sortBy="#{inf.usuario_carga}">
+                                        <h:outputText value="#{inf.usuario_carga}"/>
+                                    </p:column>
+
+                                </p:dataTable>
+                            </h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col m1 l1 xl1"></div>
+
+        </div>
+        <!-- MODAL INICIO -->
+        <p:dialog width="80%" closeOnEscape="true" dynamic="true" draggable="false" header="Vista previa" widgetVar="dlg" modal="true" id="modal">
+
+            <div class="row">
+                <div class="col s12 m12 l12 xl12">
+                    <p:media value="#{bInformeBean.rutaArchivo}" width="100%" height="500" cache="false" player="pdf">
+                        <div class="center-align">No se ha encontrado ningún informe, o su navegador no puede mostrar el archivo. Comuniquese con el administrador del sistema.</div>
+                    </p:media>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col s12 m6 l6 xl6">
+                    <h:outputText value="#{bInformeBean.informeBean.tipo_infrm} #{bInformeBean.informeBean.mes_infrm} #{bInformeBean.informeBean.ano_infrm} - #{bInformeBean.informeBean.empresa}"/>
+                    <br></br>
+                    <h:outputText value="Cargado por #{bInformeBean.informeBean.usuario_carga} el #{bInformeBean.informeBean.fecha_carga}"/>
+                    <!--<h:commandLink class="modal-close waves-effect waves-light btn-flat" value="MODIFICAR" action="in_cliente?faces-redirect=true" actionListener="#{bClienteBean.nitnonull()}"></h:commandLink>-->
+                    <!-- <h:commandLink class="modal-close waves-effect waves-light btn-flat" value="ELIMINAR" action="clientes?faces-redirect=true" actionListener=""></h:commandLink>-->
+
+                </div>
+                <div class="col s12 m6 l6 xl6">
+                    <div class="right">
+                        <h:form>
+                            <p:commandLink id="eliminar" action="nombra_archivos?faces-redirect=true" actionListener="#{bInformeBean.elimina_ficheros(bInformeBean.informeBean.archivo)}" class="btn-floating red right-align" ><i class="large material-icons">delete</i></p:commandLink>
+                        </h:form>
+                    </div>
+                </div>
+            </div>
+        </p:dialog>
+        <!-- MODAL FIN -->
+
+
+       
+    </h:body>
+
+    <!--JavaScript at end of body for optimized loading-->
+    <script type="text/javascript" src="js/bin/materialize.min.js"></script>
+    <script>
+
+        document.addEventListener('DOMContentLoaded', function () {
+            var elems = document.querySelectorAll('.sidenav');
+            var instances = M.Sidenav.init(elems);
+
+            var elems = document.querySelectorAll('.tabs');
+            var instances = M.Tabs.init(elems);
+
+            var elems = document.querySelectorAll('select');
+            var instances = M.FormSelect.init(elems);
+
+            var elems = document.querySelectorAll('.dropdown-trigger');
+            var instances = M.Dropdown.init(elems);
+
+            var elems = document.querySelectorAll('.collapsible');
+            var instances = M.Collapsible.init(elems);
+
+        });
+    </script>
+</html>

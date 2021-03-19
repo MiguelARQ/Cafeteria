@@ -1,0 +1,158 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <ui:composition template="Master.xhtml">
+        <ui:define name="body">  
+            <h:head>
+                <title>Módulo de Empresas</title>
+                <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+                <!--Import materialize.css-->
+                <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+                <link type="text/css" rel="stylesheet" href="css/custom.css"/>
+                <!--Let browser know website is optimized for mobile-->
+                <link rel="shortcut icon" href="resources/img/favicon.ico"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+
+                <!--CSS-->
+                <style type="text/css">
+                    body{
+                        background-color: #fafafa;
+                        display: flex;
+                        min-height: 100vh;
+                        flex-direction: column;
+                    }
+
+                    main {
+                        flex: 1 0 auto;
+                    }
+
+                    dataTable{
+                        text-decoration: #ffffff;
+
+                    }
+
+                    .ui-datatable .ui-datatable-header {
+                        text-align: right !important;
+                    }
+
+                    .ui-button-text-only .ui-button-text {
+                        padding: 0.3em 0.4em;
+                    }
+
+                    .ui-selectcheckboxmenu-panel .ui-selectcheckboxmenu-header .ui-chkbox {
+                        visibility: hidden;
+                    }
+
+                    .ui-filter-column .ui-column-customfilter .custom-filter {
+                        width: 100%;
+                        box-sizing: border-box;
+                    }
+
+                    .year-spinner input {
+                        width: 100%;
+                        box-sizing: border-box;
+                    }
+
+                </style>
+            </h:head>
+            <h:body>
+
+
+
+                <!--Contenido-->
+                <p:messages id="messages" showDetail="true" closable="true"/>
+
+                <div class="row"></div>
+
+                <div class="row">
+                    <div class="col m1 l1 xl1"></div>
+                    <div class="col s12 m10 l10 xl10">
+                        <div class="col s12 m12 l12 xl12">
+                            <div class="card">
+                                <div class="card-content">
+
+
+                                    <div id="factura">
+                                        <h5>Agregar nuevo almacén</h5>
+                                        <h:form id="Almacen">
+
+
+                                            <div class="row">
+                                                <div class="col s12 m4 l4 xl4">
+                                                    <label for="NombreAlmacén">Nombre del almacén*</label>
+                                                    <p:inputText placeholder="" id="NombreAlmacén" class="validate" value="#{bAlmacenBean.almacenBean.nombre_almacen}" required="true"/>
+
+                                                </div>
+                                                <div class="col s12 m4 l4 xl4">
+                                                    <label for="direccion">Dirección</label>
+                                                    <p:inputText placeholder="" id="direccion" class="validate" value="#{bAlmacenBean.almacenBean.direccion_almacen}"/>
+
+                                                </div>
+                                                <div class="col s12 m4 l4 xl4">
+                                                    <label for="Empresa">Empresa</label>
+                                                    <h:selectOneMenu id="Empresa" value="#{bAlmacenBean.almacenBean.id_empresa}" required="true">
+                                                        <f:selectItem itemLabel="Seleccionar" noSelectionOption="true"/>
+                                                        <f:selectItems value="#{muestraEmpresaBean.listaEmpresas(logInBean.usrBean.id_usr)}" var="empr" itemValue="#{empr.id_empresa}" itemLabel="#{empr.nombre_empresa}"/>
+                                                    </h:selectOneMenu>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col s3 m3 l3 xl3"></div>
+                                                <div class="col s6 m6 l6 xl6">
+                                                    <p:commandLink class="btn waves-effect waves-light cyan darken-3 white-text" style="display: block;" actionListener="#{bAlmacenBean.insertar(bAlmacenBean.almacenBean.id_empresa)}" update="messages NombreAlmacén direccion">Agregar</p:commandLink>
+                                                </div>
+                                                <div class="col s3 m3 l3 xl3"></div>
+                                            </div>
+                                        </h:form>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col m1 l1 xl1"></div>
+                </div>
+
+
+
+
+
+
+            </h:body>
+
+            <!--JavaScript at end of body for optimized loading-->
+            <script type="text/javascript" src="js/bin/materialize.min.js"></script>
+            <script type="text/javascript" src="js/datepicker.js"></script>
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    var elems = document.querySelectorAll('.sidenav');
+                    var instances = M.Sidenav.init(elems);
+
+                    var elems = document.querySelectorAll('.modal');
+                    var instances = M.Modal.init(elems);
+
+                    var elems = document.querySelectorAll('.datepicker');
+                    var instances = M.Datepicker.init(elems);
+
+                    var elems = document.querySelectorAll('.tabs');
+                    var instances = M.Tabs.init(elems);
+
+                    var elems = document.querySelectorAll('select');
+                    var instances = M.FormSelect.init(elems);
+
+                    var elems = document.querySelectorAll('.dropdown-trigger');
+                    var instances = M.Dropdown.init(elems);
+
+                    var elems = document.querySelectorAll('.collapsible');
+                    var instances = M.Collapsible.init(elems);
+                });
+            </script>
+        </ui:define>
+    </ui:composition>
+</html>

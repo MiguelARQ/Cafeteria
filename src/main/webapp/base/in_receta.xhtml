@@ -1,0 +1,365 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>Módulo de recetas</title>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+        <!--Import materialize.css-->
+        <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+        <link type="text/css" rel="stylesheet" href="css/custom.css"/>
+        <!--Let browser know website is optimized for mobile-->
+        <link rel="shortcut icon" href="resources/img/favicon.ico"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+
+        <!--CSS-->
+        <style>
+            body{
+                background-color: #fafafa;
+                display: flex;
+                min-height: 100vh;
+                flex-direction: column;
+            }
+
+            main {
+                flex: 1 0 auto;
+            }
+
+            dataTable{
+                text-decoration: #ffffff;
+
+            }
+
+            .ui-datatable .ui-datatable-header {
+                text-align: right !important;
+            }
+
+            .ui-button-text-only .ui-button-text {
+                padding: 0.3em 0.4em;
+            }
+
+            .ui-selectcheckboxmenu-panel .ui-selectcheckboxmenu-header .ui-chkbox {
+                visibility: hidden;
+            }
+
+            .ui-filter-column .ui-column-customfilter .custom-filter {
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            .year-spinner input {
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            #logo {
+                vertical-align: middle;
+            }
+        </style>
+    </h:head>
+    <h:body>
+       
+        <!--Contenido-->
+        <p:messages id="messages" showDetail="true" closable="true" />
+        <p:growl id="growl" showDetail="true" life="8000"/>
+        <div class="row">
+            <div class="col m1 l1 xl1"></div>
+            <div class="col s12 m10 l10 xl10">
+                <div class="col s12 m6 l6 xl6">
+                    <div class="card">
+                        <div class="card-content">
+                            <h5>Receta</h5>
+
+                            <h:form id="receta">
+                                <div class="row">
+                                    <div class="input-field col s12 m6 l6 xl6">
+                                        <label for="Nombre" class="active">Nombre de la receta</label>
+                                        <p:inputText id="Nombre" value="#{bRecetaBean.recetaBean.nombre_receta}" required="true" placeholder=""/>
+                                    </div>
+                                    <div class="input-field col s12 m6 l6 xl6">
+                                        <label for="Cantidad" class="active">Cantidad de porciones</label>
+                                        <p:inputText id="Cantidad" class="validate" value="#{bRecetaBean.recetaBean.cantidad_porciones}" required="true" placeholder=""/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m12 l12 xl12">
+
+                                        <label for="Instrucciones" class="active">Instrucciones</label> 
+                                        <br></br>
+                                        <p:inputTextarea id="Instrucciones" value="#{bRecetaBean.recetaBean.descripcion_receta}" rows="100" cols="30" counter="display" maxlength="1000" counterTemplate="{0} caracteres disponibles." autoResize="false" style="height:150px;" />
+                                        <h:outputLabel id="display" class="right-align"/>
+
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m6 l6 xl6">
+                                        <label for="tipo">Tipo de receta</label>
+                                        <p:selectOneMenu id="tipo" value="#{bRecetaBean.recetaBean.tipo}" required="true" style="display: block;">
+                                            <f:selectItem itemLabel="Seleccione" noSelectionOption="true"/>
+                                            <f:selectItem itemLabel="Complemento" itemValue="complemento"/>
+                                            <f:selectItem itemLabel="Terminado" itemValue="terminado"/>
+                                        </p:selectOneMenu>
+                                    </div>
+                                    <div class="col s12 m6 l6 xl6">
+                                        <div class="row"></div>
+                                        <p:commandLink id="btn" update="growl Nombre Cantidad Instrucciones :compra:radioDT modalReceta" oncomplete="PF('dlgReceta').show();" class="btn waves-effect waves-light cyan darken-3 white-text" style="display: block;">Crear receta</p:commandLink>
+                                    </div>
+                                </div>
+
+                                <p:dialog header="Establecer precio de venta" closeOnEscape="true" dynamic="true" draggable="true" widgetVar="dlgReceta" modal="true" id="modalReceta">
+                                    <div class="row">
+                                        <div class="col s12 m12 l12 xl12">
+                                            <label for="CostoModal" class="active">Costo de esta receta</label>
+                                            <p:inputText id="CostoModal" value="#{bRecetaBean.recetaBean.costo}" required="true" placeholder="" readonly="true" class="black-text"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s12 m12 l12 xl12">
+                                            <label for="PrecioS" class="active">Precio sugerido</label>
+                                            <p:inputText id="PrecioS" value="#{bRecetaBean.recetaBean.precio_sugerido}" required="true" placeholder="" readonly="true" class="black-text"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s12 m12 l12 xl12">
+                                            <label for="PrecioE" class="active">Precio establecido</label>
+                                            <p:inputText id="PrecioE" value="#{bRecetaBean.recetaBean.precio_establecido}" required="true" placeholder=""/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s12 m12 l12 xl12">
+                                            <center>
+                                                <p:commandLink update="growl Nombre Cantidad Instrucciones :compra:radioDT modalReceta" class="modal-close waves-effect waves-light btn-flat" value="CREAR RECETA" actionListener="#{bRecetaBean.insertar_todos(bGlobalBean.globalBean.id_empresa, bGlobalBean.globalBean.id_almacen)}" oncomplete="PF('dlgReceta').hide();"></p:commandLink>
+                                            </center>
+                                        </div>
+                                    </div>
+                                </p:dialog>
+                            </h:form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s12 m6 l6 xl6">
+                    <div class="card">
+                        <div class="card-content">
+                            <div id="factura">
+                                <div class="row">
+                                    <div class="col s12 m12 l12 xl12">
+                                        <ul class="tabs">
+                                            <li class="tab col s6"><a  class="active black-text" href="#ingr">Materia prima</a></li>
+                                            <li class="tab col s6"><a class="black-text"  href="#comp">Complementos</a></li>
+                                        </ul>
+                                    </div>
+                                    <div id="ingr">
+                                        <br></br><br></br><br></br>
+                                        <h:form id="Ingredientes">
+                                            <p:growl id="growl" showDetail="true" life="8000"/>
+                                            <p:dataTable stripedRows="true" scrollable="true" scrollHeight="220" id="eventsDT" selectionMode="single" selection="#{bIngredienteBean.ingredienteBean}" rowKey="#{ing.id_ingrediente}" var="ing" value="#{bIngredienteBean.listaIngredienteBean}"  widgetVar="ingTab" emptyMessage="No se encontraron datos según los criterios de busqueda." filteredValue="#{bIngredienteBean.listaFiltrar}">
+                                                <f:facet name="header">
+                                                    <h:outputText value="Buscar " />
+                                                    <p:inputText placeholder="" id="globalFilter" onkeyup="PF('ingTab').filter()" style="width:150px"/>
+                                                </f:facet>
+
+                                                <p:ajax event="rowSelect" listener="#{bRecetaBean.onRowSelect}" update=":compra:radioDT :Ingredientes:Medida"/>
+
+                                                <p:column filterBy="#{ing.nombre_ingrediente}" headerText="Nombre" filterMatchMode="contains" filterable="false">
+                                                    <h:outputText value="#{ing.nombre_ingrediente}"/>
+                                                </p:column>
+
+                                                <p:column filterBy="#{ing.marca_ingrediente}" headerText="Marca" filterMatchMode="contains" filterable="false" priority="2">
+                                                    <h:outputText value="#{ing.marca_ingrediente}"/>
+                                                </p:column>
+
+                                                <p:column filterBy="#{ing.unidad_medida}" headerText="Medida" filterMatchMode="contains" filterable="false">
+                                                    <h:outputText value="#{ing.unidad_medida}"/>
+                                                </p:column>
+
+                                                <p:column filterBy="#{ing.costo_ingrediente}" headerText="Costo" filterMatchMode="contains" filterable="false">
+                                                    <h:outputText value="Q.#{ing.costo_ingrediente}"/>
+                                                </p:column>
+                                            </p:dataTable>
+
+                                            <!-- CANTIDAD, MEDIDA Y COSTO DEL ARTÍCULO SELECCIONADO -->
+                                            <div class="row"></div>
+                                            <div class="row">
+                                                <div class="col s6 m6 l6 xl6">
+                                                    <label for="Cantidad">Cantidad</label>
+                                                    <p:inputText placeholder="" id="Cantidad" value="#{bRecetaBean.recetaBean.cantidad_item}" required="true"/>
+                                                </div>
+                                                <div class="col s6 m6 l6 xl6">
+                                                    <label for="Medida">Medida</label>
+                                                    <p:selectOneMenu id="Medida" value="#{bRecetaBean.recetaBean.id_um_item}" required="true" style="display: block;">
+                                                        <f:selectItem itemLabel="Seleccione" noSelectionOption="true"/>
+                                                        <f:selectItems value="#{bUnidadMedidaBean.listar_um_receta(bIngredienteBean.ingredienteBean.id_unidad_medida)}" var = "undm" itemValue="#{undm.id_unidad_medida}" itemLabel="#{undm.nombre_unidad_medida}"/>
+                                                    </p:selectOneMenu>
+                                                </div>
+                                            </div>
+                                            <div class="right-align">
+                                                <div class="row">
+                                                    <div class="col l3 xl3"></div>
+                                                    <div class="col s12 m12 l6 xl6">
+                                                        <p:commandLink class="btn waves-effect waves-light cyan darken-3 white-text" style="display: block;" value="Agregar" actionListener="#{bRecetaBean.insertar_nueva_lista()}" update="compra growl Cantidad eventsDT"></p:commandLink>
+                                                    </div>
+                                                    <div class="col l3 xl3"></div>
+                                                </div>
+                                            </div>
+
+                                        </h:form>
+                                    </div>
+                                    <div id="comp">
+                                        <br></br><br></br><br></br>
+                                        <h:form id="Complemento">
+                                            <p:growl id="growl" showDetail="true" sticky="true"/>
+                                            <p:dataTable stripedRows="true" id="eventsDT" selectionMode="single" selection="#{bProductoComplementoBean.productoComplementoBean}" rowKey="#{prodC.id_producto_complemento}" var="prodC" value="#{bProductoComplementoBean.listaProductoComplementoBean}" widgetVar="tabPC" emptyMessage="No se encontraron datos según los criterios de busqueda." filteredValue="#{bProductoComplementoBean.listaFiltrar}">
+                                                <f:facet name="header">
+                                                    <h:outputText value="Buscar "/>
+                                                    <p:inputText placeholder="" id="globalFilter" onkeyup="PF('tabPC').filter()" style="width:150px"/>
+                                                </f:facet>
+
+                                                <p:ajax event="rowSelect" listener="#{bRecetaBean.onRowSelectPC}" update=":compra:radioDT :Complemento:Medida"/>
+
+                                                <p:column filterBy="#{prodC.nombre_producto_complemento}" headerText="Complemento" filterMatchMode="contains" filterable="false">
+                                                    <h:outputText value="#{prodC.nombre_producto_complemento}"/>
+                                                </p:column>
+
+                                                <p:column filterBy="#{prodC.nombre_unidad_medida}" headerText="Medida" filterMatchMode="contains" filterable="false">
+                                                    <h:outputText value="#{prodC.nombre_unidad_medida}"/>
+                                                </p:column>
+
+                                                <p:column filterBy="#{prodC.costo}" headerText="Costo" filterMatchMode="contains" filterable="false">
+                                                    <h:outputText value="#{prodC.costo}"/>
+                                                </p:column>
+                                            </p:dataTable>
+
+                                            <!-- CANTIDAD, MEDIDA Y COSTO DEL ARTÍCULO SELECCIONADO -->
+                                            <div class="row"></div>
+                                            <div class="row">
+                                                <div class="col s6 m6 l6 xl6">
+                                                    <label for="Cantidad">Cantidad</label>
+                                                    <p:inputText placeholder="" id="Cantidad" value="#{bRecetaBean.recetaBean.cantidad_item}" required="true"/>
+                                                </div>
+                                                <div class="col s6 m6 l6 xl6">
+                                                    <label for="Medida">Medida</label>
+                                                    <p:selectOneMenu id="Medida" value="#{bRecetaBean.recetaBean.id_um_item}" required="true" style="display: block;">
+                                                        <f:selectItem itemLabel="Seleccione" noSelectionOption="true"/>
+                                                        <f:selectItems value="#{bUnidadMedidaBean.listar_um_receta(bProductoComplementoBean.productoComplementoBean.id_unidad_medida)}" var = "undm" itemValue="#{undm.id_unidad_medida}" itemLabel="#{undm.nombre_unidad_medida}"/>
+                                                    </p:selectOneMenu>
+                                                </div>
+                                            </div>
+                                            <div class="right-align">
+                                                <div class="row">
+                                                    <div class="col s3 m3 l3 xl3"></div>
+                                                    <div class="col s6 m6 l6 xl6">
+                                                        <p:commandLink class="btn waves-effect waves-light cyan darken-3 white-text" style="display: block;" value="Agregar" actionListener="#{bRecetaBean.insertar_nueva_lista_PC()}" update="compra growl Cantidad eventsDT"></p:commandLink>
+                                                    </div>
+                                                    <div class="col s3 m3 l3 xl3"></div>
+                                                </div>
+                                            </div>
+                                        </h:form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col m1 l1 xl1"></div>
+        </div>
+
+        <div class="row">
+            <div class="col m1 l1 xl1"></div>
+            <div class="col s12 m10 l10 xl10">
+                <div class="card">
+                    <div class="card-content">
+                        <div id="ingrediente">
+                            <h6>Materia prima para esta receta</h6>
+                            <h:form id="compra">
+                                <div class="row">
+                                    <p:dataTable stripedRows="true" id="radioDT" var="rec" scrollable="true" selectionMode="single" scrollHeight="250" value="#{bRecetaBean.listaNuevaReceta}" selection="#{bRecetaBean.recetaBean}" rowKey="#{rec.id_item}" style="margin-bottom:0" emptyMessage="No hay materia prima cargada a la receta.">
+
+                                        <p:ajax event="rowSelect" listener="#{bRecetaBean.borrar_fila_nueva_receta}" update=":compra:modal" oncomplete="PF('dlg').show();"/>
+
+                                        <p:column headerText="Materia prima" filterMatchMode="contains" filterable="false">
+                                            <h:outputText value="#{rec.nombre_item}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Cantidad" filterMatchMode="contains" filterable="false">
+                                            <h:outputText value="#{rec.cantidad_item}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Unidad de medida" filterMatchMode="contains" filterable="false">
+                                            <h:outputText value="#{rec.um_item}"/>
+                                        </p:column>
+
+                                        <p:column headerText="Costo" filterMatchMode="contains" filterable="false">
+                                            <h:outputText value="#{rec.costo_item}"/>
+                                        </p:column>
+
+                                        <p:columnGroup type="footer">
+                                            <p:row>
+                                                <p:column footerText="Costo total de esta receta: " style="text-align:right" colspan="3"/>
+                                                <p:column footerText="Q.#{bRecetaBean.total()}" colspan="1"/>
+                                            </p:row>
+                                            <p:row>
+                                                <p:column footerText="Precio sugerido:" style="text-align:right" colspan="3"/>
+                                                <p:column footerText="Q.#{bRecetaBean.precio_total()}" colspan="1"/>
+                                            </p:row>
+                                        </p:columnGroup>
+                                    </p:dataTable>
+
+                                    <!-- MODAL INICIO -->
+
+
+                                    <p:dialog closeOnEscape="true" dynamic="true" draggable="false" header="Aviso" widgetVar="dlg" modal="true" id="modal">
+
+                                        <div class="row">
+                                            <p:outputLabel>¿Realmente desea eliminar el artículo seleccionado?</p:outputLabel>
+                                        </div>
+
+                                        <div class="row">
+
+                                            <div class="col s12 m12 l12 xl12">
+                                                <center>
+                                                    <p:commandLink update=":compra:radioDT" actionListener="#{bRecetaBean.confirmacion_borrar()}" class="modal-close waves-effect waves-light btn-flat" value="SÍ" oncomplete="PF('dlg').hide();"></p:commandLink>
+                                                    <p:commandLink class="modal-close waves-effect waves-light btn-flat" value="NO" oncomplete="PF('dlg').hide();"></p:commandLink>
+                                                </center>
+                                            </div>
+                                        </div>
+                                    </p:dialog>
+                                </div>
+                            </h:form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col m1 l1 xl1"></div>
+        </div>
+
+
+    </h:body>
+
+    <!--JavaScript at end of body for optimized loading-->
+    <script type="text/javascript" src="js/bin/materialize.min.js"></script>
+    <!--<script src="//code.jquery.com/jquery.min.js"></script>-->
+    <script>
+                                                        document.addEventListener('DOMContentLoaded', function () {
+                                                            var elems = document.querySelectorAll('.sidenav');
+                                                            var instances = M.Sidenav.init(elems);
+
+                                                            var elems = document.querySelectorAll('select');
+                                                            var instances = M.FormSelect.init(elems);
+
+                                                            var elems = document.querySelectorAll('.dropdown-trigger');
+                                                            var instances = M.Dropdown.init(elems);
+
+                                                            var elems = document.querySelectorAll('.tabs');
+                                                            var instance = M.Tabs.init(elems);
+
+                                                            var elems = document.querySelectorAll('.collapsible');
+                                                            var instances = M.Collapsible.init(elems);
+                                                        });
+    </script>
+</html>

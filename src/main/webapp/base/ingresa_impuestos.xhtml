@@ -1,0 +1,158 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>Ingreso de impuestos</title>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+        <!--Import materialize.css-->
+        <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+        <link type="text/css" rel="stylesheet" href="css/custom.css"/>
+        <!--Let browser know website is optimized for mobile-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+
+        <!--CSS-->
+        <style>
+            body{
+                background-color: #fafafa;
+                display: flex;
+                min-height: 100vh;
+                flex-direction: column;
+            }
+
+            main {
+                flex: 1 0 auto;
+            }
+
+            dataTable{
+                text-decoration: #ffffff;
+
+            }
+
+            .value {
+                width: 1000px;
+            }
+
+            .alerta {
+                background-color: #c62828 !important;
+                background-image: none !important;
+                color: #000000 !important;
+
+            }
+        </style>
+    </h:head>
+    <h:body>
+     
+
+
+        <!--Contenido-->
+        <p:messages id="messages" showDetail="true" closable="true"/>
+        <div class="container ">
+            <div class="row">
+                    <div class="col s12 m6 l6 xl6">
+                        <div class="card white">
+                        <div class="card-content">
+                            <div id="fechavenc">
+                                <h5>Cambiar fecha de vencimiento</h5>
+                                <h:form id="formulario">
+                                    <div class="row">
+                                        <div class="col s12 m6 l6 xl6">
+                                            <label for="impuesto">Impuesto</label>
+                                            <p:selectOneMenu id="impuesto" value="#{bInsertaImpuestoBean.impuestoBean.id_impuesto}" style="display: block; margin-bottom: 10px" required="true">
+                                                <!--Value ejecuta el método que contiene la consulta para mostrar la lista-->
+                                                <f:selectItem itemLabel="Seleccione" noSelectionOption="true"/>
+                                                <f:selectItems value="#{bInsertaImpuestoBean.listar_todos()}" var="imp" itemValue="#{imp.id_impuesto}" itemLabel="#{imp.nombre_impuesto}"/>
+                                            </p:selectOneMenu>
+
+                                        </div>
+                                        <div class="col s12 m6 l6 xl6">
+                                            <label for="fecha">Fecha de vencimiento</label>
+                                            <p:inputMask id="fecha" value="#{bInsertaImpuestoBean.impuestoBean.fecha}" mask="99-99-9999" required="true"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col s12 m12 l12 xl12">
+                                            <div class="center">
+                                                <p:commandLink class="blue darken-3 btn waves-effect waves-light white-text center" actionListener="#{bInsertaImpuestoBean.modifica_impuesto()}" style="display: block;" update="messages formulario">Agregar</p:commandLink>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </h:form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col s12 m6 l6 xl6">
+                        <div class="card white">
+                        <div class="card-content">
+                        <div id="asignacte">
+                            <h5>Asignación de impuestos</h5>
+                            <h:form id="formulario2">
+                                <div class="row">
+                                    <div class="col s12 m12 l12 xl12">
+                                        <label for="empresa">Empresa</label>
+                                        <p:selectOneMenu id="empresa" value="#{bInsertaImpuestoBean.impuestoBean.id_empresa}" style="display: block; margin-bottom: 10px" required="true">
+                                            <!--Value ejecuta el método que contiene la consulta para mostrar la lista-->
+                                            <f:selectItem itemLabel="Seleccione" noSelectionOption="true"/>
+                                            <f:selectItems value="#{bEmpresaBean.listaEmpresasTodas()}" var="emp" itemValue="#{emp.id_empresa}" itemLabel="#{emp.empresa}"/>
+                                        </p:selectOneMenu>
+                                    </div>
+                                    <div class="col s12 m12 l12 xl12">
+                                        <h:outputLabel for="multiple" value="Impuestos"/>
+                                        <p:selectCheckboxMenu id="multiple" label="Impuestos" multiple="true" showHeader="false" value="#{bInsertaImpuestoBean.eleccionImpuestos}" style="display: block; margin-bottom: 10px">
+                                            <f:selectItems value="#{bInsertaImpuestoBean.listar_todos()}" var="impuestos" itemLabel="#{impuestos.nombre_impuesto}" itemValue="#{impuestos.id_impuesto}"/>
+                                        </p:selectCheckboxMenu>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col s12 m12 l12 xl12">
+                                        <div class="center">
+                                            <p:commandLink class="blue darken-3 btn waves-effect waves-light white-text center" actionListener="#{bInsertaImpuestoBean.inserta_empresa_impuesto()}" style="display: block;" update="messages formulario2" >Agregar</p:commandLink>
+                                        </div>
+                                    </div>
+                                </div>
+                            </h:form>
+                        </div>
+                    </div>
+                            </div>
+                </div>
+            </div>
+
+
+        </div>
+
+
+    </h:body>
+
+    <!--JavaScript at end of body for optimized loading-->
+    <script type="text/javascript" src="js/bin/materialize.min.js"></script>
+    <script type="text/javascript" src="js/datepicker.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var elems = document.querySelectorAll('.sidenav');
+            var instances = M.Sidenav.init(elems);
+
+            var elems = document.querySelectorAll('.tabs');
+            var instances = M.Tabs.init(elems);
+
+            var elems = document.querySelectorAll('select');
+            var instances = M.FormSelect.init(elems);
+
+            var elems = document.querySelectorAll('.dropdown-trigger');
+            var instances = M.Dropdown.init(elems);
+
+            var elems = document.querySelectorAll('.collapsible');
+            var instances = M.Collapsible.init(elems);
+
+        });
+    </script>
+
+
+</html>

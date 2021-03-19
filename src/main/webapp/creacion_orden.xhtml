@@ -1,0 +1,556 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <title>Módulo de ingreso de comanda</title>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"/>
+        <!--Import materialize.css-->
+        <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+        <link type="text/css" rel="stylesheet" href="css/custom.css"/>
+        <!--Let browser know website is optimized for mobile-->
+        <link rel="shortcut icon" href="resources/img/favicon.ico"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <!--Iconos externos-->
+        <a href="https://icons8.com/icon/53378/página-web"></a>
+
+
+
+        <!--CSS-->
+        <style>
+            body{
+                background-color: #fafafa;
+                display: flex;
+                min-height: 100vh;
+                flex-direction: column;
+            }
+
+            main {
+                flex: 1 0 auto;
+            }
+
+            dataTable{
+                text-decoration: #ffffff;
+
+            }
+
+            .ui-datatable .ui-datatable-header {
+                text-align: right !important;
+            }
+
+            .ui-button-text-only .ui-button-text {
+                padding: 0.3em 0.4em;
+            }
+
+            .ui-selectcheckboxmenu-panel .ui-selectcheckboxmenu-header .ui-chkbox {
+                visibility: hidden;
+            }
+
+            .ui-filter-column .ui-column-customfilter .custom-filter {
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            .year-spinner input {
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+        </style>
+    </h:head>
+    <h:body onload="#{bOrdenBean.listar_todos_productos_terminados(bGlobalBean.globalBean.id_empresa)}">
+
+
+        <!--        <c:if test="{bPrivilegioBean.listar_por_usr(logInBean.usrBean.usuario, 15)!=1}">
+        {logInBean.dirige()}
+        </c:if>-->
+        <!--Barra principal-->
+        <nav>
+            <div class="nav-wrapper z-depth-5 white">
+                <a href="#" data-target="slide-out" class="sidenav-trigger show-on-medium-and-up"><i class="material-icons black-text">menu</i></a>
+                <a href="principal.xhtml" class="brand-logo black-text">La Paninoteca</a>
+
+                <ul id="nav-mobile" class="right">
+                    <h:form>
+                        <li><h:outputText value="Hola, #{logInBean.usrBean.nombre1}" class="hide-on-small-only black-text"/></li>
+                        <li><h:commandLink action="index?faces-redirect=true" actionListener="#{logInBean.logout()}"><i class="material-icons black-text">exit_to_app</i></h:commandLink></li>
+                    </h:form>
+                </ul>
+            </div>
+        </nav>
+
+        <!--Barra de ubicación-->
+        <div class="toolbar indigo darken-4 white-text z-depth-2">
+
+            <div class="row"></div>
+            <div class="row">
+
+                <div class="col s6 m6 l6 xl6 left-align">
+                    <div class="white-text">
+                        Ingreso de comandas
+                    </div>
+                </div>
+
+                <div class="col s6 m6 l6 xl6 right-align">
+                    <a href="principal.xhtml">Dashboard ></a>
+                    <a href="#!">Ingreso de comandas</a>
+                </div>
+            </div>
+        </div>
+
+        <!--Sidenav-->
+        <ul id="slide-out" class="sidenav">
+            <li><div class="user-view">
+                    <div class="background">
+                        <img src="resources/img/login.jpg"/>
+                    </div>
+                </div>
+            </li>
+
+            <div align="center"><h5><a href="empresa.xhtml"><h:outputText class="black-text" value="#{bGlobalBean.globalBean.nombre_empresa}"/></a></h5></div>
+            <div align="center"><h:outputLabel class="black-text" value="Se encuentra en #{bGlobalBean.globalBean.nombre_almacen}"/></div>
+
+            <li class="divider" tabindex="-1"></li>
+
+            <ul class="collapsible">
+                <li>
+                    <div class="collapsible-header"><a href="principal.xhtml"><div class="black-text waves-effect col s12 m12 l12 xl12" style="width:300px;"><i class="material-icons">dashboard</i>Inicio</div></a></div>
+                </li>
+
+                <li>
+                    <div class="collapsible-header"><i class="material-icons">shopping_basket</i>Compras</div>
+                    <div class="collapsible-body">
+                        <a href="in_compras.xhtml"><div class="black-text waves-effect col s12 m12 l12 xl12" style="width:300px;"><span style="margin-left: 70px;">Ingresar compras</span></div></a>
+                        <a href="compras.xhtml"><div class="black-text waves-effect col s12 m12 l12 xl12" style="width:300px;"><span style="margin-left: 70px;">Ver compras</span></div></a>
+                        <a href="proveedores.xhtml"><div class="black-text waves-effect col s12 m12 l12 xl12" style="width:300px;"><span style="margin-left: 70px;">Proveedores</span></div></a>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="collapsible-header"><i class="material-icons">view_list</i>Inventarios</div>
+                    <div class="collapsible-body">
+                        <a href="ingredientes.xhtml"><div class="black-text waves-effect col s12 m12 l12 xl12" style="width:300px;"><span style="margin-left: 70px;">Materia prima</span></div></a>
+
+                        <a href="miscelaneos.xhtml"><div class="black-text waves-effect col s12 m12 l12 xl12" style="width:300px;"><span style="margin-left: 70px;">Miscelaneo</span></div></a>
+                        <a href="productos_complemento.xhtml"><div class="black-text waves-effect col s12 m12 l12 xl12" style="width:300px;"><span style="margin-left: 70px;">Productos complemento</span></div></a>
+                        <a href="productos_terminados.xhtml"><div class="black-text waves-effect col s12 m12 l12 xl12" style="width:300px;"><span style="margin-left: 70px;">Productos terminados</span></div></a>
+                        <a href="mermas.xhtml"><div class="black-text waves-effect col s12 m12 l12 xl12" style="width:300px;"><span style="margin-left: 70px;">Descarga</span></div></a>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="collapsible-header"><i class="material-icons">restaurant</i>Recetas</div>
+                    <div class="collapsible-body">
+                        <a href="recetas.xhtml"><div class="black-text waves-effect col s12 m12 l12 xl12" style="width:300px;"><span style="margin-left: 70px;">Recetario</span></div></a>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="collapsible-header"><i class="material-icons">room_service</i>Comandas</div>
+                    <div class="collapsible-body">
+                        <a href="in_orden.xhtml"><div class="black-text waves-effect col s12 m12 l12 xl12" style="width:300px;"><span style="margin-left: 70px;">Nueva comanda</span></div></a>
+                        <a href="ordenes_abiertas.xhtml"><div class="black-text waves-effect col s12 m12 l12 xl12" style="width:300px;"><span style="margin-left: 70px;">Comandas abiertas</span></div></a>
+                        <a href="ordenes_en_proceso.xhtml"><div class="black-text waves-effect col s12 m12 l12 xl12" style="width:300px;"><span style="margin-left: 70px;">Comandas en proceso</span></div></a>
+                        <a href="monitor_ordenes.xhtml"><div class="black-text waves-effect col s12 m12 l12 xl12" style="width:300px;"><span style="margin-left: 70px;">Monitor de comandas</span></div></a>
+                        <a href="clientes.xhtml"><div class="black-text waves-effect col s12 m12 l12 xl12" style="width:300px;"><span style="margin-left: 70px;">Clientes</span></div></a>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="collapsible-header"><i class="material-icons">description</i>Facturación</div>
+                    <div class="collapsible-body">
+                        <a href="ordenes_cerradas.xhtml"><div class="black-text waves-effect col s12 m12 l12 xl12" style="width:300px;"><span style="margin-left: 70px;">Facturar</span></div></a>
+                        <a href="detalle_facturas.xhtml"><div class="black-text waves-effect col s12 m12 l12 xl12" style="width:300px;"><span style="margin-left: 70px;">Facturas emitidas</span></div></a>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="collapsible-header"><i class="material-icons">laptop_windows</i>Caja</div>
+                    <div class="collapsible-body">
+                        <a href="cajas.xhtml"><div class="black-text waves-effect col s12 m12 l12 xl12" style="width:300px;"><span style="margin-left: 70px;">Cajas</span></div></a>
+                        <a href="in_evento.xhtml"><div class="black-text waves-effect col s12 m12 l12 xl12" style="width:300px;"><span style="margin-left: 70px;">Cierre de caja</span></div></a>
+                        <a href="cortes_caja.xhtml"><div class="black-text waves-effect col s12 m12 l12 xl12" style="width:300px;"><span style="margin-left: 70px;">Historial de cierres de caja</span></div></a>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="collapsible-header"><i class="material-icons">store</i>Empresas</div>
+                    <div class="collapsible-body">
+                        <a href="empresas.xhtml"><div class="black-text waves-effect col s12 m12 l12 xl12" style="width:300px;"><span style="margin-left: 70px;">Empresas</span></div></a>
+                        <a href="almacenes.xhtml"><div class="black-text waves-effect col s12 m12 l12 xl12" style="width:300px;"><span style="margin-left: 70px;">Almacenes</span></div></a>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="collapsible-header"><i class="material-icons">people</i>Usuarios</div>
+                    <div class="collapsible-body">
+                        <a href="usuarios.xhtml"><div class="black-text waves-effect col s12 m12 l12 xl12" style="width:300px;"><span style="margin-left: 70px;">Perfiles</span></div></a>
+                        <a href="roles.xhtml"><div class="black-text waves-effect col s12 m12 l12 xl12" style="width:300px;"><span style="margin-left: 70px;">Puestos de trabajo</span></div></a>
+                        <a href="rolesprivilegios.xhtml"><div class="black-text waves-effect col s12 m12 l12 xl12" style="width:300px;"><span style="margin-left: 70px;">Modulos de acceso</span></div></a>
+                    </div>
+                </li>
+
+                <li>
+                    <div class="collapsible-header"><i class="material-icons">settings</i>Parámetros</div>
+                    <div class="collapsible-body">
+                        <a href="param_facturas.xhtml"><div class="black-text waves-effect col s12 m12 l12 xl12" style="width:300px;"><span style="margin-left: 70px;">Facturas</span></div></a>
+                        <a href="umBases.xhtml"><div class="black-text waves-effect col s12 m12 l12 xl12" style="width:300px;"><span style="margin-left: 70px;">Unidades base</span></div></a>
+                        <a href="unidades_medida.xhtml"><div class="black-text waves-effect col s12 m12 l12 xl12" style="width:300px;"><span style="margin-left: 70px;">Unidades de medida</span></div></a>
+                    </div>
+                </li>
+            </ul>
+
+            <li class="divider" tabindex="-1"></li>
+            <li>
+                <footer class="page-footer black-text white">
+                    <div class="row">
+                        <h:form>
+                            <center>
+                                <h:outputLabel value="Versión 1.0.0"/>
+                            </center>
+                        </h:form>
+                    </div>
+                </footer>
+            </li>
+        </ul>
+
+        <!--Contenido-->
+        <p:messages id="messages" showDetail="true" closable="true"/>
+        <p:growl id="growl" showDetail="false" life="8000"/>
+        <div class="row">
+            <div class="col m1 l1 xl1"></div>
+
+            <div class="col s12 m10 l10 xl10">
+
+                <div class="row">
+                    <div class="col s12 m6 l6 xl6">
+                        <div class="card">
+                            <div class="card-content">
+                                <h:form id="Principal">
+                                    <div class="row">
+                                        <div class="col s12 m4 l4 xl4">
+                                            <label for="comer-llevar" class="active">Modalidad</label> 
+                                            <h:selectOneMenu id="comer-llevar" value="#{bOrdenBean.ordenBean.aqui_llevar}" required="true">
+                                                <f:selectItem itemLabel="Seleccione" noSelectionOption="true"/>
+                                                <f:selectItem itemLabel="Sala" itemValue="sala"/>
+                                                <f:selectItem itemLabel="Llevar" itemValue="llevar"/>
+                                                <f:selectItem itemLabel="Domicilio" itemValue="domicilio"/>
+                                            </h:selectOneMenu>
+                                        </div>
+                                        <div class="col s12 m4 l4 xl4">
+                                            <label for="NoMesa">No. mesa</label>
+                                            <p:inputText id="NoMesa" class="validate" value="#{bOrdenBean.ordenBean.mesa_aqui}"/>
+                                            
+                                        </div>
+                                        <div class="col s12 m4 l4 xl4">
+                                            <label for="direccion">Dirección</label>
+                                            <p:inputText placeholder="" id="direccion" class="validate" value="#{bOrdenBean.ordenBean.direccion_llevar}"/>
+                                            
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col s12 m4 l4 xl4">
+                                            <p:inputText readonly="true" placeholder="" id="id" class="hide" value="#{bOrdenBean.ordenBean.id_orden}"/>
+                                        </div>
+                                        <div class="col s12 m4 l4 xl4 center">
+                                            <p:commandLink id="btn" update="growl comer-llevar NoMesa direccion :tabla:radioDT" class="btn waves-effect waves-light white-text" actionListener="#{bOrdenBean.agregar_orden(bGlobalBean.globalBean.id_empresa, logInBean.usrBean.id_usr)}">Crear comanda</p:commandLink>
+                                        </div>
+                                         <div class="col s12 m4 l4 xl4">
+                                            <p:inputText readonly="true" placeholder="" id="num" class="hide" value="#{bOrdenBean.ordenBean.num_orden}"/>
+                                        </div>
+                                    </div>
+                                </h:form>
+                            </div>    
+                        </div>
+                    </div>
+                    <div class="col s12 m6 l6 xl6">
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col s12 m6 l6 xl6">
+                        <div class="card">
+                            <div class="card-content">
+                                <h5>Menú</h5>
+                                <div id="platillos">
+
+                                    <h:form id="Tablas">
+
+                                        <div class="row">
+                                            <div class="col s12 m12 l12 xl12">
+                                                <br></br>
+                                                <ul class="tabs tabs-fixed-width">
+                                                    <li class="tab col s2"><a class="black-text" href="#ent"><center><img src="https://img.icons8.com/ios-filled/30/000000/sandwich.png"></img></center></a></li>
+                                                    <li class="tab col s2"><a class="black-text" href="#princ"><center><img src="https://img.icons8.com/ios/30/000000/meal.png"></img></center></a></li>
+                                                    <li class="tab col s2"><a class="black-text" href="#ens"><center><img src="https://img.icons8.com/small/30/000000/salad.png"></img></center></a></li>
+                                                    <li class="tab col s2"><a class="black-text" href="#beb"><i class="material-icons">free_breakfast</i></a></li>
+                                                    <li class="tab col s2"><a class="black-text" href="#post"><center><img src="https://img.icons8.com/wired/30/000000/ice-cream-in-waffle-cone.png"></img></center></a></li>
+                                                    <li class="tab col s2"><a class="black-text" href="#ext"><i class="material-icons">add_circle</i></a></li>
+                                                </ul>
+                                            </div>
+
+                                            <div class="row"></div>
+
+
+                                            <div id="ent">
+                                                <br></br>
+                                                <p:dataTable id="eventsEnt" selectionMode="single" selection="#{bOrdenBean.productoTBean}" rowKey="#{prodT.id_producto_terminado}" var="prodT" value="#{bOrdenBean.listaProductoTerminadoEntrada}" emptyMessage="No hay artículos en la lista.">
+
+                                                    <f:facet name="header">
+                                                        <center>
+                                                            Entrada
+                                                        </center>
+                                                    </f:facet>
+
+                                                    <p:ajax event="rowSelect" listener="#{bOrdenBean.onRowSelect}" oncomplete="PF('seleccion').show();"/>
+
+                                                    <p:column headerText="Descripción">
+                                                        <h:outputText value="#{prodT.nombre_producto_terminado}"/>
+                                                    </p:column>
+                                                    <p:column headerText="Precio unitario">
+                                                        <h:outputText class="right" value="Q.#{prodT.precio_venta_porcion}"/>
+                                                    </p:column>
+                                                </p:dataTable>
+
+                                            </div>
+                                            <div id="princ">
+                                                <br></br>
+                                                <p:dataTable id="eventsPr" selectionMode="single" selection="#{bOrdenBean.productoTBean}" rowKey="#{prodT.id_producto_terminado}" var="prodT" value="#{bOrdenBean.listaProductoTerminadoPrincipal}"  emptyMessage="No hay artículos en la lista.">
+
+                                                    <f:facet name="header">
+                                                        <center>
+                                                            Plato principal
+                                                        </center>
+                                                    </f:facet>
+
+                                                    <p:ajax event="rowSelect" listener="#{bOrdenBean.onRowSelect}" oncomplete="PF('seleccion').show();"/>
+
+                                                    <p:column headerText="Descripción">
+                                                        <h:outputText value="#{prodT.nombre_producto_terminado}"/>
+                                                    </p:column>
+                                                    <p:column headerText="Precio unitario">
+                                                        <h:outputText class="right" value="Q.#{prodT.precio_venta_porcion}"/>
+                                                    </p:column>
+                                                </p:dataTable>
+
+                                            </div>
+                                            <div id="beb">
+                                                <br></br>
+                                                <p:dataTable id="eventsBeb" selectionMode="single" selection="#{bOrdenBean.productoTBean}" rowKey="#{prodT.id_producto_terminado}" var="prodT" value="#{bOrdenBean.listaProductoTerminadoBebida}"  emptyMessage="No hay artículos en la lista.">
+
+                                                    <f:facet name="header">
+                                                        <center>
+                                                            Bebida
+                                                        </center>
+                                                    </f:facet> 
+
+                                                    <p:ajax event="rowSelect" listener="#{bOrdenBean.onRowSelect}" oncomplete="PF('seleccion').show();"/>
+
+                                                    <p:column headerText="Descripción">
+                                                        <h:outputText value="#{prodT.nombre_producto_terminado}"/>
+                                                    </p:column>
+                                                    <p:column headerText="Precio unitario">
+                                                        <h:outputText class="right" value="Q.#{prodT.precio_venta_porcion}"/>
+                                                    </p:column>
+                                                </p:dataTable>
+
+
+                                            </div>
+                                            <div id="ens">
+                                                <br></br>
+                                                <p:dataTable id="eventsEns" selectionMode="single" selection="#{bOrdenBean.productoTBean}" rowKey="#{prodT.id_producto_terminado}" var="prodT" value="#{bOrdenBean.listaProductoTerminadoEnsalada}"  emptyMessage="No hay artículos en la lista.">
+
+                                                    <f:facet name="header">
+                                                        <center>
+                                                            Ensalada
+                                                        </center>
+                                                    </f:facet>
+
+                                                    <p:ajax event="rowSelect" listener="#{bOrdenBean.onRowSelect}" oncomplete="PF('seleccion').show();"/>
+
+                                                    <p:column headerText="Descripción">
+                                                        <h:outputText value="#{prodT.nombre_producto_terminado}"/>
+                                                    </p:column>
+                                                    <p:column headerText="Precio unitario">
+                                                        <h:outputText class="right" value="Q.#{prodT.precio_venta_porcion}"/>
+                                                    </p:column>
+                                                </p:dataTable>
+
+
+                                            </div>
+                                            <div id="post">
+                                                <br></br>
+                                                <p:dataTable id="eventsPos" selectionMode="single" selection="#{bOrdenBean.productoTBean}" rowKey="#{prodT.id_producto_terminado}" var="prodT" value="#{bOrdenBean.listaProductoTerminadoPostre}"  emptyMessage="No hay artículos en la lista.">
+
+                                                    <f:facet name="header">
+                                                        <center>
+                                                            Postre
+                                                        </center>
+                                                    </f:facet>
+
+                                                    <p:ajax event="rowSelect" listener="#{bOrdenBean.onRowSelect}" oncomplete="PF('seleccion').show();"/>
+
+                                                    <p:column headerText="Descripción">
+                                                        <h:outputText value="#{prodT.nombre_producto_terminado}"/>
+                                                    </p:column>
+                                                    <p:column headerText="Precio unitario">
+                                                        <h:outputText class="right" value="Q.#{prodT.precio_venta_porcion}"/>
+                                                    </p:column>
+                                                </p:dataTable>
+
+
+                                            </div>
+                                            <div id="ext">
+                                                <br></br>
+                                                <p:dataTable id="eventsExt" selectionMode="single" selection="#{bOrdenBean.productoTBean}" rowKey="#{prodT.id_producto_terminado}" var="prodT" value="#{bOrdenBean.listaProductoTerminadoExtra}"  emptyMessage="No hay artículos en la lista.">
+
+                                                    <f:facet name="header">
+                                                        <center>
+                                                            Extra
+                                                        </center>
+                                                    </f:facet>
+
+                                                    <p:ajax event="rowSelect" listener="#{bOrdenBean.onRowSelect}" oncomplete="PF('seleccion').show();"/>
+
+                                                    <p:column headerText="Cant. disponible">
+                                                        <h:outputText class="right" value="#{prodT.cantidad_real}"/>
+                                                    </p:column>
+                                                    <p:column headerText="Precio unitario">
+                                                        <h:outputText class="right" value="Q.#{prodT.precio_venta_porcion}"/>
+                                                    </p:column>
+                                                </p:dataTable>
+
+
+                                            </div>
+                                        </div>
+                                    </h:form>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s12 m6 l6 xl6">
+                        <div class="card">
+                            <div class="card-content">
+                                <h5>Esta comanda</h5>
+                                <div class="row">
+                                    <h:form id="tabla">
+                                        <div class="row">
+
+                                            <div class="col s12">
+                                                <p:dataTable selectionMode="single" id="radioDT" var="ordenP" value="#{bOrdenBean.listaOrdenProductoBean}" selection="#{bOrdenBean.ordenProductoBean}" rowKey="#{ordenP.id_producto_terminado}" style="margin-bottom:0" emptyMessage="No hay artículos cargados a la comanda.">
+
+                                                    <p:ajax event="rowSelect" listener="#{bOrdenBean.borrar_fila_productosenorden}" update=":tabla:modal" oncomplete="PF('dlg').show();"/>
+
+                                                    <p:column headerText="Producto" filterMatchMode="contains" filterable="false">
+                                                        <h:outputText value="#{ordenP.nomnre_producto}"/>
+                                                    </p:column>
+
+                                                    <p:column headerText="Cantidad" filterMatchMode="contains" filterable="false">
+                                                        <h:outputText class="right" value="#{ordenP.cantidad_orden_producto}"/>
+                                                    </p:column>
+                                                </p:dataTable>
+                                            </div>
+
+                                            <p:dialog closeOnEscape="true" responsive="true" dynamic="true" draggable="false" header="Aviso" widgetVar="dlg" modal="true" id="modal">
+
+                                                <div class="row">
+                                                    <p:outputLabel>¿Realmente desea eliminar el platillo seleccionado?</p:outputLabel>
+                                                </div>
+
+                                                <div class="row">
+
+                                                    <div class="col s12 m12 l12 xl12">
+                                                        <center>
+                                                            <p:commandLink update=":tabla:radioDT :Tablas:eventsEnt :Tablas:eventsPr :Tablas:eventsBeb :Tablas:eventsEns :Tablas:eventsPos" actionListener="#{bOrdenBean.confirmacion_borrar(bGlobalBean.globalBean.id_empresa)}" class="modal-close waves-effect waves-light btn-flat" value="SÍ" oncomplete="PF('dlg').hide();"></p:commandLink>
+                                                            <p:commandLink class="modal-close waves-effect waves-light btn-flat" value="NO" oncomplete="PF('dlg').hide();"></p:commandLink>
+                                                        </center>
+                                                    </div>
+                                                </div>
+                                            </p:dialog>
+                                        </div>
+                                    </h:form>
+
+                                    <h:form id="dialog2">
+                                        <p:dialog closeOnEscape="true" header="#{bOrdenBean.ordenBean.nombre_producto}" dynamic="true" draggable="false" widgetVar="seleccion" modal="true" id="mdl">
+                                            <div class="row">
+                                                <div class="col s12 m12 l12 xl12">
+                                                    <label for="cantidad">Cantidad</label>
+                                                    <p:inputText placeholder="" id="cantidad" value="#{bOrdenBean.ordenBean.cantidad}" class="black-text validate"/>
+                                                    <br></br>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col s12 m12 l12 xl12">
+                                                    <label for="desc">Descripción</label>
+                                                    <p:inputText placeholder="" id="desc" value="#{bOrdenBean.ordenBean.descripcion}" class="black-text validate"/>
+                                                    <br></br>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+
+                                                <div class="col s12 m12 l12 xl12">
+                                                    <center>
+                                                        <p:commandLink class="modal-close waves-effect waves-light btn-flat" value="AGREGAR" actionListener="#{bOrdenBean.listar_producto(bGlobalBean.globalBean.id_empresa)}" update="cantidad desc messages :tabla:radioDT :Tablas:eventsEnt :Tablas:eventsPr :Tablas:eventsBeb :Tablas:eventsEns :Tablas:eventsPos" oncomplete="PF('seleccion').hide();"></p:commandLink>
+                                                    </center>
+                                                </div>
+                                            </div>
+                                        </p:dialog>
+                                    </h:form>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col m1 l1 xl1"></div>
+        </div>
+
+
+
+
+        <!--footer-->
+        <header></header>
+        <main></main>
+        <li class="divider" tabindex="-1"></li>
+        <footer class="page-footer white black-text z-depth-1">
+            <div class="row">
+                <div class="col s6 m6 l6 xl6 hide-on-med-and-down show-on-large show-on-extra-large">© 2019 Todos los derechos reservados</div>
+                <div class="col s6 m6 l6 xl6 hide-on-med-and-down show-on-large show-on-extra-large right-align">Desarrollado por Soluciones Tecnológicas de Guatemala</div>
+                <div class="center-align show-on-medium-and-down hide-on-large-only hide-on-extra-large-only">© 2019 Soluciones Tecnológicas Guatemala</div>
+            </div>
+
+        </footer>
+    </h:body>
+
+    <!--JavaScript at end of body for optimized loading-->
+    <script type="text/javascript" src="js/bin/materialize.min.js"></script>
+    <!--<script src="//code.jquery.com/jquery.min.js"></script>-->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var elems = document.querySelectorAll('.sidenav');
+            var instances = M.Sidenav.init(elems);
+
+            var elems = document.querySelectorAll('select');
+            var instances = M.FormSelect.init(elems);
+
+            var elems = document.querySelectorAll('.dropdown-trigger');
+            var instances = M.Dropdown.init(elems);
+
+            var elems = document.querySelectorAll('.tabs');
+            var instance = M.Tabs.init(elems);
+
+            var elems = document.querySelectorAll('.collapsible');
+            var instances = M.Collapsible.init(elems);
+        });
+    </script>
+</html>
